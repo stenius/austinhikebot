@@ -1,6 +1,6 @@
 # Austin Hike Bot
 
-Bot for pulling events for various public hikes into r/austinhikes.
+Bot for pulling events for various public hikes into [r/austinhikes](https://www.reddit.com/r/AustinHiking/)
 
 ## Settings
 
