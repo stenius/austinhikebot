@@ -1,6 +1,4 @@
 #! /usr/bin/env python3
-
-
 import meetup.api
 import re
 import datetime
@@ -47,5 +45,4 @@ def get_event_post_title(event, show_venue_name=True):
 
 if __name__ == '__main__':
     events = client.GetEvents({'group_urlname': 'Austin-Sierra-Club-Outings'})
-    results = events.results
-    parse_events(results)
+    parse_events(events.results)
