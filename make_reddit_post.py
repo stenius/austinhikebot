@@ -2,41 +2,18 @@
 import praw
 
 from get_meetup_events import *
-from settings import *
+import settings
 from models import *
 
 if __name__ == '__main__':
-    reddit = praw.Reddit(client_id=REDDIT_APP_ID,
-        client_secret=REDDIT_APP_SECRET,
+    reddit = praw.Reddit(client_id=settings.REDDIT_APP_ID,
+        client_secret=settings.REDDIT_APP_SECRET,
         user_agent='HikeBot',
-        username=REDDIT_APP_USERNAME,
-        password=REDDIT_APP_PASSWORD)
-    subreddit = reddit.subreddit('austinhiking')
+        username=settings.REDDIT_APP_USERNAME,
+        password=settings.REDDIT_APP_PASSWORD)
+    subreddit = reddit.subreddit(settings.REDDIT_SUBREDDIT)
 
-    meetup_groups = [
-        {
-            'urlslug':'Austin-Sierra-Club-Outings',
-            'name':'Austin Sierra Club',
-        },
-        {
-            'urlslug':'OUTSIDEinTexas',
-            'name':'Outside In Texas',
-        },
-        {
-            'urlslug':'backpackers-170',
-            'name':'Austin Backpackers',
-        },
-        {
-            'urlslug':'hiking-586',
-            'name':'COD Hiking',
-        },
-        {
-            'urlslug':'Hiking-For-Tacos',
-            'name':'HFT',
-        },
-    ]
-
-    for meetupgroup in meetup_groups:
+    for meetupgroup in settings.MEETUP_GROUPS:
         group, group_created = MeetupGroup.get_or_create(
                 urlslug=meetupgroup['urlslug'],
                 defaults={
@@ -73,6 +50,7 @@ if __name__ == '__main__':
                 else:
                     print('\tskipping event')
                     pass
+                    # TODO: post updated information to post
                     # reddit_post = RedditPost.get(RedditPost.event=event)
                     # submission = reddit.submission(id=submission.id)
             else:

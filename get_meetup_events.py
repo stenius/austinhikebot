@@ -3,17 +3,17 @@ import meetup.api
 import re
 import datetime
 
-from settings import MEETUP_API_KEY
+import settings
 
 
 client = meetup.api.Client()
-key = MEETUP_API_KEY
+key = settings.MEETUP_API_KEY
 client.api_key = key
 
 
 def parse_events(results):
     events = []
-    regex = re.compile(r'Bouldering|Meeting|Book Club|([D|d]ocumentary)|([S|s]creening)|Town Lake|Shoal Creek')
+    regex = re.compile(settings.EVENT_IGNORE_REGEX)
 
     for event in results:
         if re.search(regex, event['name']):
