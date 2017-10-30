@@ -46,26 +46,26 @@ if __name__ == '__main__':
         events = client.GetEvents({'group_urlname': meetupgroup['urlslug']})
         filtered_events = parse_events(events.results)
         for event_result in filtered_events:
-            title = get_event_post_title(event_result, group_name='%s:'%meetupgroup['name'], show_venue_name=False)
+            event, event_created = MeetupEvent.get_or_create(
+                    meetup_id=event_result['id'],
+                    url=event_result['event_url'],
+                    group=group,
+                    defaults={
+                        'name': event_result['name'],
+                        'venue_name': event_result['venue']['name'],
+                        'datetime': datetime.datetime.fromtimestamp(event_result['time']/1000.),
+                        'created': datetime.datetime.fromtimestamp(event_result['created']/1000.),
+                        'description': event_result['description'],
+                        'yes_rsvp_count': event_result['yes_rsvp_count'],
+                        'waitlist_count': event_result['waitlist_count'],
+                        'maybe_rsvp_count': event_result['maybe_rsvp_count'],
+                    }
+                )
+            title = event.get_post_title(show_venue_name=False)
             print(title)
-            if MeetupEvent.filter(datetime__gte=datetime.datetime.now(),
-                    name=event_result['name']).count() < 5:
-                event, event_created = MeetupEvent.get_or_create(
-                        meetup_id=event_result['id'],
-                        url=event_result['event_url'],
-                        group=group,
-                        defaults={
-                            'name': event_result['name'],
-                            'venue_name': event_result['venue']['name'],
-                            'datetime': datetime.datetime.fromtimestamp(event_result['time']/1000.),
-                            'created': datetime.datetime.fromtimestamp(event_result['created']/1000.),
-                            'description': event_result['description'],
-                            'yes_rsvp_count': event_result['yes_rsvp_count'],
-                            'waitlist_count': event_result['waitlist_count'],
-                            'maybe_rsvp_count': event_result['maybe_rsvp_count'],
-                        }
-                    )
-                if event_created:
+            if not RedditPost.filter(event=event).count():
+                if MeetupEvent.filter(datetime__gte=datetime.datetime.now(),
+                        name=event_result['name']).count() < 5:
                     print('\tcreated event')
                     submission = subreddit.submit(title=title, url=event_result['event_url'])
                     reddit_post = RedditPost.create(event=event, title=title,
@@ -75,3 +75,5 @@ if __name__ == '__main__':
                     pass
                     # reddit_post = RedditPost.get(RedditPost.event=event)
                     # submission = reddit.submission(id=submission.id)
+            else:
+                print('\talready posted')
