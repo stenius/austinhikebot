@@ -1,6 +1,6 @@
 # Austin Hike Bot
 
-Bot for pulling events for various public hikes into [r/austinhikes](https://www.reddit.com/r/AustinHiking/)
+Bot for pulling events for various public hikes into [r/AustinHiking](https://www.reddit.com/r/AustinHiking/)
 
 This bot queries meetup.com for events in specific groups, checks them against
 a regex blacklist, and then posts a link to reddit.com.
