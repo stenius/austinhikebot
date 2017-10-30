@@ -6,6 +6,8 @@ import settings
 from models import *
 
 if __name__ == '__main__':
+    '''get events from meetup and make reddit posts'''
+
     reddit = praw.Reddit(client_id=settings.REDDIT_APP_ID,
         client_secret=settings.REDDIT_APP_SECRET,
         user_agent='HikeBot',

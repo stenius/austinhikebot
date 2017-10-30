@@ -12,18 +12,14 @@ client.api_key = key
 
 
 def parse_events(results):
-    events = []
+    '''filters meetup api response events to determine if the name passes the
+       ignore regex'''
+
     regex = re.compile(settings.EVENT_IGNORE_REGEX)
 
-    for event in results:
-        if re.search(regex, event['name']):
-            pass
-        else:
-            date = datetime.datetime.fromtimestamp(event['time']/1000.)
-            if date < (datetime.datetime.now() + datetime.timedelta(days=365)):
-                events.append(event)
-    return events
+    return [event for event in results if not re.search(regex, event['name'])]
 
 if __name__ == '__main__':
+    '''grab event and test filtering events'''
     events = client.GetEvents({'group_urlname': 'Austin-Sierra-Club-Outings'})
-    parse_events(events.results)
+    print(parse_events(events.results))
