@@ -1,5 +1,7 @@
 # Austin Hike Bot
 
+This code is no longer functional.  Meetup has changed their API and started requiring payment for it.
+
 Bot for pulling events for various public hikes into [r/AustinHiking](https://www.reddit.com/r/AustinHiking/)
 
 This bot queries meetup.com for events in specific groups, checks them against
